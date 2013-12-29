@@ -153,7 +153,7 @@ console.log(html);
 ###stripTag()
 ```
 // input = '<h1>abc</h1>&\'"';
-<@= input|escapeHtml @>
+<@= input|stripTag @>
 // output = 'abc&\'"';
 ```
 ###trim()
