@@ -23,16 +23,16 @@ var html = tipJSP.render("<ul><li><@=name@></li><li><@=age@></li></ul>", vdata);
 ```
 
 #Installation
-##Node.js
+###Node.js
 ```
 npm install tipjsp -save
 ```
-##Web browser
+###Web browser
 ```
 <script src='tipJSP.js'></script>
 ```
 #Rendering
-##tipJSP.render(string, data)
+###tipJSP.render(string, data)
 - template  
 
 ```
@@ -63,7 +63,7 @@ console.log(html);
 	<li>peku3</li>
 </ul>
 ```
-##tipJSP.renderFile(path, data);
+###tipJSP.renderFile(path, data);
 ```
 var vdata = {
 	arr : ["peku1","peku2","peku3"]
