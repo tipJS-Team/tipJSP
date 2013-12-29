@@ -2,13 +2,13 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 ======
 
 #Features
--Complies with the Express view system
--Web browser and Node.js support
--error line number support
--Includes
--Custom seperator
--String modifier
--Custom user modifier support
+- Complies with the Express view system
+- Web browser and Node.js support
+- error line number support
+- Includes
+- Custom seperator
+- String modifier
+- Custom user modifier support
 
 #Quick example
 Below is quick example how to use tipJSP.js:
@@ -33,7 +33,8 @@ npm install tipjsp -save
 ```
 #Rendering
 ##tipJSP.render(string, data)
--template
+- template  
+
 ```
 <script type='text/tipJSP' id='template'>
 <ul>
@@ -43,7 +44,8 @@ npm install tipjsp -save
 </ul>
 </script>
 ```
--script
+- script  
+
 ```
 var vdata = {
 	arr : ["peku1","peku2","peku3"]
@@ -52,7 +54,8 @@ var vdata = {
 var html = tipJSP.render(document.getElementById("template").innerHTML, vdata);
 console.log(html);
 ```
--output
+- output  
+
 ```
 <ul>
 	<li>peku1</li>
@@ -71,11 +74,13 @@ console.log(html);
 ```
 
 #Includes
--header.jsp
+- header.jsp  
+
 ```
 <h1>HEADER</h1>
 ```
--body.jsp
+- body.jsp  
+
 ```
 <html>
 <body>
@@ -83,7 +88,8 @@ console.log(html);
 </body>
 </html>
 ```
--output
+- output  
+
 ```
 <html>
 <body>
@@ -92,7 +98,8 @@ console.log(html);
 </html>
 ```
 #Change seperator
--template
+- template  
+
 ```
 <ul>
 <% for(var i=0; i<arr.length; i++){ %>
@@ -100,7 +107,8 @@ console.log(html);
 <% } %>
 </ul>
 ```
--script
+- script  
+
 ```
 var vdata = {
 	arr : ["peku1","peku2","peku3"]
