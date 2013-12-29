@@ -2,7 +2,7 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 ======
 
 #Features
-- Complies with the Express view system
+- Complies with the Express3 view system
 - Web browser and Node.js support
 - error line number support
 - Includes
@@ -121,7 +121,7 @@ var html = tipJSP.setSep('<%', '%>').render(str, vdata);
 console.log(html);
 ```
 
-#Express view system
+#Express3 view system
 ```
 app.engine( 'jsp', require('tipjsp') );
 app.set('views', __dirname + '/views');
@@ -132,4 +132,4 @@ app.engine( 'jsp', require('tipjsp').setSep('<%', '%>') );
 ```
 
 #Thanks
--Maeng,KiWan / hikaMaeng
+- Maeng,KiWan / hikaMaeng
