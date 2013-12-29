@@ -124,11 +124,11 @@ console.log(html);
 ```
 ###cutStrb(length[, reststr])
 ```
-// input = '°¡³ª´Ùabc';
+// input = 'ê°€ë‚˜ë‹¤abc';
 <@= input|cutStrb,2 @>
-// output = '°¡³ª...';
+// output = 'ê°€ë‚˜...';
 <@= input|cutStrb,5,'..' @>
-// output = '°¡³ª´Ùab..';
+// output = 'ê°€ë‚˜ë‹¤ab..';
 ```
 ###escapeHtml()
 ```
@@ -147,8 +147,8 @@ console.log(html);
 // input = 1234567;
 <@= input|numcomma @>
 // output = '1,234,567';
-<@= input|numcomma,'¿ø' @>
-// output = '1,234,567¿ø';
+<@= input|numcomma,'ì›' @>
+// output = '1,234,567ì›';
 ```
 ###stripTag()
 ```
