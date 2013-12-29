@@ -1,0 +1,25 @@
+{
+  "name": "tipjsp",
+  "version": "0.1.0",
+  "description": "tipJSP(JavaScript Page) is the JavaScript template engine.",
+  "main": "./tipJSP.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tipJS-Team/tipJSP.git"
+  },
+  "keywords": [
+    "tipJSP",
+    "JavaScript",
+    "template",
+    "engine"
+  ],
+  "author": "Copyright 2013.12. SeungHyun PAEK, tipJS-Team.",
+  "engines": { "node": ">= 0.10.15" },
+  "license": "MIT or GPL",
+  "bugs": {
+    "url": "https://github.com/tipJS-Team/tipJSP/issues"
+  }
+}
