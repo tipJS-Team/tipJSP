@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.1.0
+ * opensource JavaScript template engine ver.0.1.1
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_reader, _getPath, _pcompile, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.1.0', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.1.1', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -35,9 +35,9 @@ var tipJSP = (function(){
 				return ( !s ) ? '' : s.replace( rcrn, "\n" ).replace( rcr, "\n" ).replace( rcn, to );
 			},
 			cr2br:function(s){
-				return ( !s ) ? '' : this.cr2( s, '<br>' );
+				return ( !s ) ? '' : this.cr2( s, '<br />' );
 			},
-			currency:function(n, mk, rg){
+			numcomma:function(n, mk, rg){
 				var t0, t1;
 				if( !n && n !== 0 ) return "0" + ( mk ? mk : '' );
 				if( !( rg instanceof RegExp ) ) rg = rCurrency;
@@ -67,12 +67,6 @@ var tipJSP = (function(){
 			},
 			stripTag:function(s){
 				return ( !s ) ? '' : s.replace( /(<([^>]+)>)/ig, '' );
-			},
-			toLower:function(s){
-				return ( !s ) ? '' : s.toLowerCase();
-			},
-			toUpper:function(s){
-				return ( !s ) ? '' : s.toUpperCase();
 			},
 			trim:trim
 		};

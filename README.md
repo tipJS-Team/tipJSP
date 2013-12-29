@@ -31,6 +31,17 @@ npm install tipjsp -save
 ```
 <script src='tipJSP.js'></script>
 ```
+
+#Express3 framework view system
+```
+app.engine( 'jsp', require('tipjsp') );
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jsp');
+// or
+app.engine( 'jsp', require('tipjsp').setSep('<%', '%>') );
+...
+```
+
 #Rendering
 ###tipJSP.render(string, data)
 - template  
@@ -97,6 +108,61 @@ console.log(html);
 </body>
 </html>
 ```
+
+#String modifier
+###cr2(to)
+```
+// input = 'peku1\r\npeku2\rpeku3';
+<@= input|cr2,'\n' @>
+// output = 'peku1\npeku2\npeku3';
+```
+###cr2br()
+```
+// input = 'peku1\r\npeku2\npeku3';
+<@= input|cr2br @>
+// output = 'peku1<br />peku2<br />peku3';
+```
+###cutStrb(length[, reststr])
+```
+// input = '가나다abc';
+<@= input|cutStrb,2 @>
+// output = '가나...';
+<@= input|cutStrb,5,'..' @>
+// output = '가나다ab..';
+```
+###escapeHtml()
+```
+// input = '<h1>abc</h1>&\'"';
+<@= input|escapeHtml @>
+// output = '&lt;h1&gt;abc&lt;/h1&gt;&amp;&apos;&quot;';
+```
+###escapeBackslash()
+```
+// input = 'a\\b\\c';
+<@= input|escapeBackslash @>
+// output = 'a\\\\b\\\\c';
+```
+###numcomma([unit])
+```
+// input = 1234567;
+<@= input|numcomma @>
+// output = '1,234,567';
+<@= input|numcomma,'원' @>
+// output = '1,234,567원';
+```
+###stripTag()
+```
+// input = '<h1>abc</h1>&\'"';
+<@= input|escapeHtml @>
+// output = 'abc&\'"';
+```
+###trim()
+```
+// input = '  abc d ef  ';
+<@= input|trim @>
+// output = 'abc d ef';
+```
+
 #Change seperator
 - template  
 
@@ -119,16 +185,6 @@ var html = tipJSP.render(str, vdata);
 // or
 var html = tipJSP.setSep('<%', '%>').render(str, vdata);
 console.log(html);
-```
-
-#Express3 framework view system
-```
-app.engine( 'jsp', require('tipjsp') );
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jsp');
-// or
-app.engine( 'jsp', require('tipjsp').setSep('<%', '%>') );
-...
 ```
 
 #Thanks
