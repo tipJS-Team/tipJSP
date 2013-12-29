@@ -2,8 +2,8 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 ======
 
 #Features
-- Complies with the Express3 view system
-- Web browser and Node.js support
+- Complies with the Express3 framework view system
+- Web browser(IE 7+, Chrome, Firefox, Safari, etc...) and Node.js support
 - error line number support
 - Includes
 - Custom seperator
@@ -14,12 +14,12 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 Below is quick example how to use tipJSP.js:
 ```
 var vdata = {
-	name : "Peku",
+	name : "peku",
 	age : 20
 };
 
 var html = tipJSP.render("<ul><li><@=name@></li><li><@=age@></li></ul>", vdata);
-// output "<ul><li>Peku</li><li>20</li></ul>"
+// output "<ul><li>peku</li><li>20</li></ul>"
 ```
 
 #Installation
@@ -121,7 +121,7 @@ var html = tipJSP.setSep('<%', '%>').render(str, vdata);
 console.log(html);
 ```
 
-#Express3 view system
+#Express3 framework view system
 ```
 app.engine( 'jsp', require('tipjsp') );
 app.set('views', __dirname + '/views');
