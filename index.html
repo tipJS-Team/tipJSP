@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>tipJSP(JavaScript Page) by tipJS-Team</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>tipJSP(JavaScript Page)</h1>
+        <h2>tipJSP(JavaScript Page) - JavaScript template engine.</h2>
+        <a href="https://github.com/tipJS-Team/tipJSP" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="tipjspjavascript-page---javascript-template-engine" class="anchor" href="#tipjspjavascript-page---javascript-template-engine"><span class="octicon octicon-link"></span></a>tipJSP(JavaScript Page) - JavaScript template engine.</h1>
+
+<h1>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h1>
+
+<ul>
+<li>Complies with the Express3 framework view system</li>
+<li>Web browser(IE 7+, Chrome, Firefox, Safari, etc...) and Node.js support</li>
+<li>error line number support</li>
+<li>Includes</li>
+<li>Custom seperator</li>
+<li>String modifier</li>
+<li>Custom user modifier support</li>
+</ul><h1>
+<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>Quick example</h1>
+
+<p>Below is quick example how to use tipJSP.js:</p>
+
+<pre><code>var vdata = {
+    name : "peku",
+    age : 20
+};
+
+var html = tipJSP.render("&lt;ul&gt;&lt;li&gt;&lt;@=name@&gt;&lt;/li&gt;&lt;li&gt;&lt;@=age@&gt;&lt;/li&gt;&lt;/ul&gt;", vdata);
+// output "&lt;ul&gt;&lt;li&gt;peku&lt;/li&gt;&lt;li&gt;20&lt;/li&gt;&lt;/ul&gt;"
+</code></pre>
+
+<h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<h3>
+<a name="nodejs" class="anchor" href="#nodejs"><span class="octicon octicon-link"></span></a>Node.js</h3>
+
+<pre><code>npm install tipjsp -save
+</code></pre>
+
+<h3>
+<a name="web-browser" class="anchor" href="#web-browser"><span class="octicon octicon-link"></span></a>Web browser</h3>
+
+<pre><code>&lt;script src='tipJSP.js'&gt;&lt;/script&gt;
+</code></pre>
+
+<h1>
+<a name="express3-framework-view-system" class="anchor" href="#express3-framework-view-system"><span class="octicon octicon-link"></span></a>Express3 framework view system</h1>
+
+<pre><code>app.engine( 'jsp', require('tipjsp') );
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jsp');
+// or
+app.engine( 'jsp', require('tipjsp').setSep('&lt;%', '%&gt;') );
+...
+</code></pre>
+
+<h1>
+<a name="rendering" class="anchor" href="#rendering"><span class="octicon octicon-link"></span></a>Rendering</h1>
+
+<h3>
+<a name="tipjsprenderstring-data" class="anchor" href="#tipjsprenderstring-data"><span class="octicon octicon-link"></span></a>tipJSP.render(string, data)</h3>
+
+<ul>
+<li>template<br>
+</li>
+</ul><pre><code>&lt;script type='text/tipJSP' id='template'&gt;
+&lt;ul&gt;
+&lt;@ for(var i=0; i&lt;arr.length; i++){ @&gt;
+    &lt;li&gt;&lt;@= arr[i] @&gt;&lt;/li&gt;
+&lt;@ } @&gt;
+&lt;/ul&gt;
+&lt;/script&gt;
+</code></pre>
+
+<ul>
+<li>script<br>
+</li>
+</ul><pre><code>var vdata = {
+    arr : ["peku1","peku2","peku3"]
+};
+
+var html = tipJSP.render(document.getElementById("template").innerHTML, vdata);
+console.log(html);
+</code></pre>
+
+<ul>
+<li>output<br>
+</li>
+</ul><pre><code>&lt;ul&gt;
+    &lt;li&gt;peku1&lt;/li&gt;
+    &lt;li&gt;peku2&lt;/li&gt;
+    &lt;li&gt;peku3&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<h3>
+<a name="tipjsprenderfilepath-data" class="anchor" href="#tipjsprenderfilepath-data"><span class="octicon octicon-link"></span></a>tipJSP.renderFile(path, data);</h3>
+
+<pre><code>var vdata = {
+    arr : ["peku1","peku2","peku3"]
+};
+
+var html = tipJSP.renderFile("./template.jsp", vdata);
+console.log(html);
+</code></pre>
+
+<h1>
+<a name="includes" class="anchor" href="#includes"><span class="octicon octicon-link"></span></a>Includes</h1>
+
+<ul>
+<li>header.jsp<br>
+</li>
+</ul><pre><code>&lt;h1&gt;HEADER&lt;/h1&gt;
+</code></pre>
+
+<ul>
+<li>body.jsp<br>
+</li>
+</ul><pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;@ include header.jsp @&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<ul>
+<li>output<br>
+</li>
+</ul><pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;h1&gt;HEADER&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h1>
+<a name="string-modifier" class="anchor" href="#string-modifier"><span class="octicon octicon-link"></span></a>String modifier</h1>
+
+<h3>
+<a name="cr2to" class="anchor" href="#cr2to"><span class="octicon octicon-link"></span></a>cr2(to)</h3>
+
+<pre><code>// input = 'peku1\r\npeku2\rpeku3';
+&lt;@= input|cr2,'\n' @&gt;
+// output = 'peku1\npeku2\npeku3';
+</code></pre>
+
+<h3>
+<a name="cr2br" class="anchor" href="#cr2br"><span class="octicon octicon-link"></span></a>cr2br()</h3>
+
+<pre><code>// input = 'peku1\r\npeku2\npeku3';
+&lt;@= input|cr2br @&gt;
+// output = 'peku1&lt;br /&gt;peku2&lt;br /&gt;peku3';
+</code></pre>
+
+<h3>
+<a name="cutstrblength-reststr" class="anchor" href="#cutstrblength-reststr"><span class="octicon octicon-link"></span></a>cutStrb(length[, reststr])</h3>
+
+<pre><code>// input = '가나다abc';
+&lt;@= input|cutStrb,2 @&gt;
+// output = '가나...';
+&lt;@= input|cutStrb,5,'..' @&gt;
+// output = '가나다ab..';
+</code></pre>
+
+<h3>
+<a name="escapehtml" class="anchor" href="#escapehtml"><span class="octicon octicon-link"></span></a>escapeHtml()</h3>
+
+<pre><code>// input = '&lt;h1&gt;abc&lt;/h1&gt;&amp;\'"';
+&lt;@= input|escapeHtml @&gt;
+// output = '&amp;lt;h1&amp;gt;abc&amp;lt;/h1&amp;gt;&amp;amp;&amp;apos;&amp;quot;';
+</code></pre>
+
+<h3>
+<a name="escapebackslash" class="anchor" href="#escapebackslash"><span class="octicon octicon-link"></span></a>escapeBackslash()</h3>
+
+<pre><code>// input = 'a\\b\\c';
+&lt;@= input|escapeBackslash @&gt;
+// output = 'a\\\\b\\\\c';
+</code></pre>
+
+<h3>
+<a name="numcommaunit" class="anchor" href="#numcommaunit"><span class="octicon octicon-link"></span></a>numcomma([unit])</h3>
+
+<pre><code>// input = 1234567;
+&lt;@= input|numcomma @&gt;
+// output = '1,234,567';
+&lt;@= input|numcomma,'원' @&gt;
+// output = '1,234,567원';
+</code></pre>
+
+<h3>
+<a name="striptag" class="anchor" href="#striptag"><span class="octicon octicon-link"></span></a>stripTag()</h3>
+
+<pre><code>// input = '&lt;h1&gt;abc&lt;/h1&gt;&amp;\'"';
+&lt;@= input|stripTag @&gt;
+// output = 'abc&amp;\'"';
+</code></pre>
+
+<h3>
+<a name="trim" class="anchor" href="#trim"><span class="octicon octicon-link"></span></a>trim()</h3>
+
+<pre><code>// input = '  abc d ef  ';
+&lt;@= input|trim @&gt;
+// output = 'abc d ef';
+</code></pre>
+
+<h1>
+<a name="change-seperator" class="anchor" href="#change-seperator"><span class="octicon octicon-link"></span></a>Change seperator</h1>
+
+<ul>
+<li>template<br>
+</li>
+</ul><pre><code>&lt;ul&gt;
+&lt;% for(var i=0; i&lt;arr.length; i++){ %&gt;
+    &lt;li&gt;&lt;%= arr[i] %&gt;&lt;/li&gt;
+&lt;% } %&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<ul>
+<li>script<br>
+</li>
+</ul><pre><code>var vdata = {
+    arr : ["peku1","peku2","peku3"]
+};
+var str = document.getElementById("template").innerHTML;
+tipJSP.setSep('&lt;%', '%&gt;');
+var html = tipJSP.render(str, vdata);
+// or
+var html = tipJSP.setSep('&lt;%', '%&gt;').render(str, vdata);
+console.log(html);
+</code></pre>
+
+<h1>
+<a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>Thanks</h1>
+
+<ul>
+<li>Maeng,KiWan / hikaMaeng</li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/tipJS-Team/tipJSP/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/tipJS-Team/tipJSP/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/tipJS-Team/tipJSP"></a> is maintained by <a href="https://github.com/tipJS-Team">tipJS-Team</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
