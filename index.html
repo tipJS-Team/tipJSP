@@ -9,6 +9,17 @@
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>tipJSP(JavaScript Page)</title>
+    <script src="./tipJSP.js" type="text/javascript"></script>
+    <style>
+    #tryoutput{
+    	margin:0;
+    	padding:10px;
+    	width:100%;
+    	background:#fff;
+    	color:#000;
+    	border:1px solid blue;
+    }
+    </style>
   </head>
 
   <body>
@@ -45,7 +56,9 @@
 <li>Custom seperator</li>
 <li>String modifier</li>
 <li>Custom user modifier support</li>
-</ul><h1>
+</ul>
+
+<h1>
 <a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>Quick example</h1>
 
 <p>Below is quick example how to use tipJSP.js:</p>
@@ -59,6 +72,46 @@ var html = tipJSP.render("&lt;ul&gt;&lt;li&gt;&lt;@=name@&gt;&lt;/li&gt;&lt;li&g
 // output "&lt;ul&gt;&lt;li&gt;peku&lt;/li&gt;&lt;li&gt;20&lt;/li&gt;&lt;/ul&gt;"
 </code></pre>
 
+<h1>
+<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>Try it!</h1>
+<article>
+<h5>The Data.</h5>
+<pre><code>var vdata = {
+  title : 'tipJS template engine',
+  name : 'peku',
+  age : 20,
+  money : 1000000,
+  list : ['list1', 'list2', 'list3']
+};
+</code></pre>
+<h5>The Template.</h5>
+<textarea onkeyup='tryit();' id='tryTemplate' rows='10' style='width:100%;'>
+<h1><@= title @></h1>
+<p><@= name @> : <@= money|numcomma,' $' @></p>
+<ul>
+<@ for(var i=0; i<list.length; i++) {@>
+  <li><@= list[i] @></li>
+<@ } @>
+</ul>
+</textarea>
+<h5>The Result.</h5>
+<div id='tryoutput'></div>
+<script>
+var vdata = {
+  title : 'tipJS template engine',
+  name : 'peku',
+  age : 20,
+  money : 1000000,
+  list : ['list1', 'list2', 'list3']
+};
+function tryit(){
+	var tryoutput = document.getElementById('tryoutput'),
+		trystr = document.getElementById('tryTemplate').value;
+	tryoutput.innerHTML = tipJSP.render(trystr, vdata);
+}
+tryit();
+</script>
+</article>
 <h1>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
 
