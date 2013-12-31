@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.2.0
+ * opensource JavaScript template engine ver.0.2.1
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_reader, _getPath, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.2.0', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.2.1', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -145,10 +145,10 @@ var tipJSP = (function(){
 					}else{ // pas
 						if( !( t0 = trim( tks[1].replace( r2, '\n' ).replace( r3, '$1' ).replace( r4, '::tipJSP::' ).replace( r11, '' ) ) ).indexOf( 'include' ) ){
 							if( typeof ( t0 = _renderFile( _getPath( opts, trim( t0.substr( 7 ).replace( r12, '' ) ) ), opts ) ) == 'object' ) throw t0;
-							rt.push( _push + '"' + t0 + '"' + ');' );
+							rt.push( _push + '"' + t0.replace( r1, '\\"' ) + '"' + ');' );
 						}else rt.push( t0 );
 					}
-				}else rt.push( _push + '"' + tk + '"' + ');' );
+				}else rt.push( _push + '"' + tk.replace( r1, '\\"' ) + '"' + ');' );
 			}
 			return rt.push( '} return [_$$buf.join(""), _$$ln];}catch(e){e.p=_$$pt,e.ln=_$$ln;throw e;};' ), rt.join( '' );
 		};
