@@ -171,7 +171,6 @@ var tipJSP = (function(){
 				for( i = t0.length; i--; ) if( t0[i].match( t1 ) ){html = t0[i].replace( t1, '' ); break;}
 			}else html = html.replace( r4, '' );
 			i = 1, t0 = html.split( ED );
-			console.log( _compile( t0, opts, i, modifier.escapeBackslash( path ) ) );
 			try{return new Function( '_$ln, _$$tipJSP, _$mdf', _compile( t0, opts, i, modifier.escapeBackslash( path ) ) )( i, opts, modifier )[0];}
 			catch(e){return e;}
 		};
