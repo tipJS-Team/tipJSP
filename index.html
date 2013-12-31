@@ -42,24 +42,22 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>
-<a name="tipjspjavascript-page---javascript-template-engine" class="anchor" href="#tipjspjavascript-page---javascript-template-engine"><span class="octicon octicon-link"></span></a>tipJSP(JavaScript Page) - JavaScript template engine.</h1>
 
 <h1>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h1>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>&lt;@ Features @&gt;</h1>
 
 <ul>
-<li>Complies with the Express3 framework view system</li>
+<li><a href="#express3-framework-view-system">Complies with the Express3 framework view system</a></li>
 <li>Web browser(IE 7+, Chrome, Firefox, Safari, etc...) and Node.js support</li>
 <li>error line number support</li>
-<li>Includes</li>
-<li>Custom seperator</li>
-<li>String modifier</li>
+<li><a href="#includes">Includes</a></li>
+<li><a href="#change-seperator">Custom seperator</a></li>
+<li><a href="#string-modifier">String modifier<></li>
 <li>Custom user modifier support</li>
 </ul>
 
 <h1>
-<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>Quick example</h1>
+<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>&lt;@ Quick example @&gt;</h1>
 
 <p>Below is quick example how to use tipJSP.js:</p>
 
@@ -73,7 +71,7 @@ var html = tipJSP.render("&lt;ul&gt;&lt;li&gt;&lt;@=name@&gt;&lt;/li&gt;&lt;li&g
 </code></pre>
 
 <h1>
-<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>Try it!</h1>
+<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>&lt;@ Try it! @&gt;</h1>
 <article>
 <h5>The Data.</h5>
 <pre><code>var vdata = {
@@ -113,7 +111,7 @@ tryit();
 </script>
 </article>
 <h1>
-<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>&lt;@ Installation @&gt;</h1>
 
 <h3>
 <a name="nodejs" class="anchor" href="#nodejs"><span class="octicon octicon-link"></span></a>Node.js</h3>
@@ -128,7 +126,7 @@ tryit();
 </code></pre>
 
 <h1>
-<a name="express3-framework-view-system" class="anchor" href="#express3-framework-view-system"><span class="octicon octicon-link"></span></a>Express3 framework view system</h1>
+<a name="express3-framework-view-system" class="anchor" href="#express3-framework-view-system"><span class="octicon octicon-link"></span></a>&lt;@ Express3 framework view system @&gt;</h1>
 
 <pre><code>app.engine( 'jsp', require('tipjsp') );
 app.set('views', __dirname + '/views');
@@ -139,7 +137,7 @@ app.engine( 'jsp', require('tipjsp').setSep('&lt;%', '%&gt;') );
 </code></pre>
 
 <h1>
-<a name="rendering" class="anchor" href="#rendering"><span class="octicon octicon-link"></span></a>Rendering</h1>
+<a name="rendering" class="anchor" href="#rendering"><span class="octicon octicon-link"></span></a>&lt;@ Rendering @&gt;</h1>
 
 <h3>
 <a name="tipjsprenderstring-data" class="anchor" href="#tipjsprenderstring-data"><span class="octicon octicon-link"></span></a>tipJSP.render(string, data)</h3>
@@ -183,7 +181,7 @@ console.log(html);
 </code></pre>
 
 <h1>
-<a name="includes" class="anchor" href="#includes"><span class="octicon octicon-link"></span></a>Includes</h1>
+<a name="includes" class="anchor" href="#includes"><span class="octicon octicon-link"></span></a>&lt;@ Includes @&gt;</h1>
 
 <h5>header.jsp</h5>
 </ul><pre><code>&lt;h1&gt;HEADER&lt;/h1&gt;
@@ -206,7 +204,7 @@ console.log(html);
 </code></pre>
 
 <h1>
-<a name="string-modifier" class="anchor" href="#string-modifier"><span class="octicon octicon-link"></span></a>String modifier</h1>
+<a name="string-modifier" class="anchor" href="#string-modifier"><span class="octicon octicon-link"></span></a>&lt;@ String modifier @&gt;</h1>
 
 <h3>
 <a name="cr2to" class="anchor" href="#cr2to"><span class="octicon octicon-link"></span></a>cr2(to)</h3>
@@ -277,7 +275,7 @@ console.log(html);
 </code></pre>
 
 <h1>
-<a name="change-seperator" class="anchor" href="#change-seperator"><span class="octicon octicon-link"></span></a>Change seperator</h1>
+<a name="change-seperator" class="anchor" href="#change-seperator"><span class="octicon octicon-link"></span></a>&lt;@ Change seperator @&gt;</h1>
 
 <h5>template</h5>
 <pre><code>&lt;ul&gt;
@@ -300,7 +298,7 @@ console.log(html);
 </code></pre>
 
 <h1>
-<a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>Thanks</h1>
+<a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>&lt;@ Thanks @&gt;</h1>
 
 <ul>
 <li>Maeng,KiWan / hikaMaeng</li>
