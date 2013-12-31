@@ -1,6 +1,6 @@
 {
   "name": "tipjsp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "tipJSP(JavaScript Page) is the JavaScript template engine.",
   "main": "./tipJSP.js",
   "scripts": {
