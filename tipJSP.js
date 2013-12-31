@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.2.1
+ * opensource JavaScript template engine ver.0.2.2
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_reader, _getPath, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.2.1', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.2.2', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -119,7 +119,7 @@ var tipJSP = (function(){
 			var rt, i, ln, j, k, tk, ntk, tks, t0;
 
 			rt = [];
-			rt.push( 'var _$$buf=[],_$$pt="'+path+'";try{with(_$$tipJSP){' );
+			rt.push( 'var _$$buf=[],_$$ln,_$$pt="'+path+'";try{with(_$$tipJSP){' );
 
 			for( i = 0, ln = tokens.length; i < ln; i++ ){
 				tk = tokens[i],
@@ -171,7 +171,7 @@ var tipJSP = (function(){
 				for( i = t0.length; i--; ) if( t0[i].match( t1 ) ){html = t0[i].replace( t1, '' ); break;}
 			}else html = html.replace( r4, '' );
 			i = 1, t0 = html.split( ED );
-			try{return new Function( '_$ln, _$$tipJSP, _$mdf', _compile( t0, opts, i, modifier.escapeBackslash( path ) ) )( i, opts, modifier )[0];}
+			try{return new Function( '_$$tipJSP, _$mdf', _compile( t0, opts, i, modifier.escapeBackslash( path ) ) )( opts, modifier )[0];}
 			catch(e){return e;}
 		};
 	})();
