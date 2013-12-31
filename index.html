@@ -17,7 +17,7 @@
     	width:100%;
     	background:#fff;
     	color:#000;
-    	border:1px solid blue;
+    	border:2px solid orange;
     }
     </style>
   </head>
@@ -85,7 +85,7 @@ var html = tipJSP.render("&lt;ul&gt;&lt;li&gt;&lt;@=name@&gt;&lt;/li&gt;&lt;li&g
 };
 </code></pre>
 <h5>The Template.</h5>
-<textarea onkeyup='tryit();' id='tryTemplate' rows='10' style='width:100%;'>
+<textarea onkeyup='tryit();' id='tryTemplate' rows='10' style='width:100%;border 2px green;'>
 <h1><@= title @></h1>
 <p><@= name @> : <@= money|numcomma,' $' @></p>
 <ul>
@@ -144,10 +144,8 @@ app.engine( 'jsp', require('tipjsp').setSep('&lt;%', '%&gt;') );
 <h3>
 <a name="tipjsprenderstring-data" class="anchor" href="#tipjsprenderstring-data"><span class="octicon octicon-link"></span></a>tipJSP.render(string, data)</h3>
 
-<ul>
-<li>template<br>
-</li>
-</ul><pre><code>&lt;script type='text/tipJSP' id='template'&gt;
+<h5>template</h5>
+<pre><code>&lt;script type='text/tipJSP' id='template'&gt;
 &lt;ul&gt;
 &lt;@ for(var i=0; i&lt;arr.length; i++){ @&gt;
     &lt;li&gt;&lt;@= arr[i] @&gt;&lt;/li&gt;
@@ -156,10 +154,8 @@ app.engine( 'jsp', require('tipjsp').setSep('&lt;%', '%&gt;') );
 &lt;/script&gt;
 </code></pre>
 
-<ul>
-<li>script<br>
-</li>
-</ul><pre><code>var vdata = {
+<h5>script</h5>
+<pre><code>var vdata = {
     arr : ["peku1","peku2","peku3"]
 };
 
@@ -167,10 +163,8 @@ var html = tipJSP.render(document.getElementById("template").innerHTML, vdata);
 console.log(html);
 </code></pre>
 
-<ul>
-<li>output<br>
-</li>
-</ul><pre><code>&lt;ul&gt;
+<h5>output</h5>
+<pre><code>&lt;ul&gt;
     &lt;li&gt;peku1&lt;/li&gt;
     &lt;li&gt;peku2&lt;/li&gt;
     &lt;li&gt;peku3&lt;/li&gt;
@@ -191,26 +185,20 @@ console.log(html);
 <h1>
 <a name="includes" class="anchor" href="#includes"><span class="octicon octicon-link"></span></a>Includes</h1>
 
-<ul>
-<li>header.jsp<br>
-</li>
+<h5>header.jsp</h5>
 </ul><pre><code>&lt;h1&gt;HEADER&lt;/h1&gt;
 </code></pre>
 
-<ul>
-<li>body.jsp<br>
-</li>
-</ul><pre><code>&lt;html&gt;
+<h5>body.jsp</h5>
+<pre><code>&lt;html&gt;
 &lt;body&gt;
 &lt;@ include header.jsp @&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
 
-<ul>
-<li>output<br>
-</li>
-</ul><pre><code>&lt;html&gt;
+<h5>output</h5>
+<pre><code>&lt;html&gt;
 &lt;body&gt;
 &lt;h1&gt;HEADER&lt;/h1&gt;
 &lt;/body&gt;
@@ -291,20 +279,16 @@ console.log(html);
 <h1>
 <a name="change-seperator" class="anchor" href="#change-seperator"><span class="octicon octicon-link"></span></a>Change seperator</h1>
 
-<ul>
-<li>template<br>
-</li>
-</ul><pre><code>&lt;ul&gt;
+<h5>template</h5>
+<pre><code>&lt;ul&gt;
 &lt;% for(var i=0; i&lt;arr.length; i++){ %&gt;
     &lt;li&gt;&lt;%= arr[i] %&gt;&lt;/li&gt;
 &lt;% } %&gt;
 &lt;/ul&gt;
 </code></pre>
 
-<ul>
-<li>script<br>
-</li>
-</ul><pre><code>var vdata = {
+<h5>script</h5>
+<pre><code>var vdata = {
     arr : ["peku1","peku2","peku3"]
 };
 var str = document.getElementById("template").innerHTML;
