@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.3.1
+ * opensource JavaScript template engine ver.0.3.2
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_modifier, _reader, _getPath, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.3.1', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.3.2', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -123,8 +123,7 @@ var tipJSP = (function(){
 			for( i = 0, ln = tokens.length; i < ln; i++ ){
 				tk = tokens[i],
 				t0 = tk.match( r2 );
-				if( t0 ) lln += t0.length;
-				rt.push( "_$$ln=" + lln + ';' );
+				if( t0 ) rt.push( "_$$ln=" + (lln += t0.length) + ';' );
 				if( tk.indexOf( ST ) > -1 ){
 					tks = tk.split( ST );
 					rt.push( _push + '"' + tks[0].replace( r1, '\\"' ) + '"' + ');' );
@@ -189,7 +188,7 @@ var tipJSP = (function(){
 	_getRs = (function(){
 		var r1, t0;
 		r1 = /::tipJSP::/g,
-		t0 = function(e){return [e.message, e.p || 'tipJSP template', e.ln ? 'line:' + e.ln : ''].join('\n');};
+		t0 = function(e){return e.ln ? [e.message, e.p || 'tipJSP template', e.ln ? 'line:' + e.ln : ''].join('\n'):'SyntaxError ' + (e.p ? 'in ' + e.p:'while compiling tipJSP');};
 		return function(rs){
 			return ( typeof rs == 'object' ) ? t0( rs ) : rs.replace( r1, '\n' );
 		};
