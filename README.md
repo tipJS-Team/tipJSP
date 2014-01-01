@@ -10,7 +10,7 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 - [Simple condition syntax](#simple-condition-syntax)
 - [Custom seperator](#change-seperator)
 - [String modifier](#string-modifier)
-- Custom user modifier support
+- [Custom user modifier](#custom-user-modifier)
 
 #Quick example
 Below is quick example how to use tipJSP.js:
@@ -200,6 +200,30 @@ var html = tipJSP.render(templateStr, vdata);
 </html>
 ```
 
+#Change seperator
+#####template  
+
+```
+<ul>
+<% for(var i=0; i<arr.length; i++){ %>
+	<li><%= arr[i] %></li>
+<% } %>
+</ul>
+```
+#####script  
+
+```
+var vdata = {
+	arr : ["peku1","peku2","peku3"]
+};
+var str = document.getElementById("template").innerHTML;
+tipJSP.setSep('<%', '%>');
+var html = tipJSP.render(str, vdata);
+// or
+var html = tipJSP.setSep('<%', '%>').render(str, vdata);
+console.log(html);
+```
+
 #String modifier
 ###cr2(to)
 ```
@@ -254,28 +278,41 @@ var html = tipJSP.render(templateStr, vdata);
 // output = 'abc d ef';
 ```
 
-#Change seperator
+#Custom user modifier
 #####template  
 
 ```
-<ul>
-<% for(var i=0; i<arr.length; i++){ %>
-	<li><%= arr[i] %></li>
-<% } %>
-</ul>
+<div><@= num|double @></div>
+<div><@= num|half @></div>
 ```
+
 #####script  
 
 ```
-var vdata = {
-	arr : ["peku1","peku2","peku3"]
+var vData = {
+	age : 20
+};
+var userModifier = {
+	double : function( num ){
+		return num * 2;
+	},
+	half : function( num ){
+		return num / 2;
+	}
 };
 var str = document.getElementById("template").innerHTML;
-tipJSP.setSep('<%', '%>');
+tipJSP.setModifier( userModifier );
 var html = tipJSP.render(str, vdata);
 // or
-var html = tipJSP.setSep('<%', '%>').render(str, vdata);
+var html = tipJSP.setModifier( userModifier ).render(str, vdata);
 console.log(html);
+```
+
+#####output  
+
+```
+<div>40</div>
+<div>10</div>
 ```
 
 #Thanks
