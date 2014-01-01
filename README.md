@@ -6,6 +6,8 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 - Web browser(IE 7+, Chrome, Firefox, Safari, etc...) and Node.js support
 - error line number support
 - Includes
+- Simple loop syntax
+- Simple condition syntax
 - Custom seperator
 - String modifier
 - Custom user modifier support
@@ -44,7 +46,7 @@ app.engine( 'jsp', require('tipjsp').setSep('<%', '%>') );
 
 #Rendering
 ###tipJSP.render(string, data)
-- template  
+#####template  
 
 ```
 <script type='text/tipJSP' id='template'>
@@ -55,7 +57,7 @@ app.engine( 'jsp', require('tipjsp').setSep('<%', '%>') );
 </ul>
 </script>
 ```
-- script  
+#####script  
 
 ```
 var vdata = {
@@ -65,7 +67,7 @@ var vdata = {
 var html = tipJSP.render(document.getElementById("template").innerHTML, vdata);
 console.log(html);
 ```
-- output  
+#####output  
 
 ```
 <ul>
@@ -84,13 +86,100 @@ var html = tipJSP.renderFile("./template.jsp", vdata);
 console.log(html);
 ```
 
+#Simple loop syntax
+## Array
+#####template  
+
+```
+<ul>
+<@# i in arr @>
+	<li><@= arr[i] @></li>
+<@ } @>
+</ul>
+```
+#####script  
+
+```
+var vdata = {
+	arr : ["peku1","peku2","peku3"]
+};
+
+var html = tipJSP.render(templateStr, vdata);
+```
+#####output  
+
+```
+<ul>
+	<li>peku1</li>
+	<li>peku2</li>
+	<li>peku3</li>
+</ul>
+```
+
+## Object
+#####template  
+
+```
+<ul>
+<@# k in obj @>
+	<li><@= obj[k] @></li>
+<@ } @>
+</ul>
+```
+#####script  
+
+```
+var vdata = {
+	obj : {a:"peku1",b:"peku2",c:"peku3"}
+};
+
+var html = tipJSP.render(templateStr, vdata);
+```
+#####output  
+
+```
+<ul>
+	<li>peku1</li>
+	<li>peku2</li>
+	<li>peku3</li>
+</ul>
+```
+
+#Simple condition syntax
+#####template  
+
+```
+<@# input @> or <@# input == true @>
+	<h1><@=value1@></h1>
+<@ } @>
+<@# !input @> or <@# input == false @>
+	<h1><@=value2@></h1>
+<@ } @>
+```
+#####script  
+
+```
+var vdata = {
+	input : true,
+	value1 : 'true',
+	value2 : 'false'
+};
+
+var html = tipJSP.render(templateStr, vdata);
+```
+#####output  
+
+```
+<h1>true</h1>
+```
+
 #Includes
-- header.jsp  
+#####header.jsp  
 
 ```
 <h1>HEADER</h1>
 ```
-- body.jsp  
+#####body.jsp  
 
 ```
 <html>
@@ -99,7 +188,7 @@ console.log(html);
 </body>
 </html>
 ```
-- output  
+#####output  
 
 ```
 <html>
@@ -164,7 +253,7 @@ console.log(html);
 ```
 
 #Change seperator
-- template  
+#####template  
 
 ```
 <ul>
@@ -173,7 +262,7 @@ console.log(html);
 <% } %>
 </ul>
 ```
-- script  
+#####script  
 
 ```
 var vdata = {

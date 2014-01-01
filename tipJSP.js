@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.2.2
+ * opensource JavaScript template engine ver.0.3.0
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_reader, _getPath, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.2.2', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.3.0', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -105,46 +105,50 @@ var tipJSP = (function(){
 
 ////////////////////////////////// _compile
 	_compile = (function(){
-		var _push, r1, r2, r3, r4, r11, r12;
+		var _push, r1, r2, r3, r4, r5;
 
 		_push = '_$$buf.push(',
 		r1 = /"/g, //"
 		r2 = /::tipJSP::/g,
 		r3 = /(?:\/\*(?:[\s\S]*?)\*\/)|(?:([\s])+\/\/(?:.*)$)/gm,
 		r4 = /\n/g,
-		r11 = /::tipJSP::/g,
-		r12 = /"|'/g; //"
+		r5 = /"|'/g; //"
 
 		return function(tokens, opts, lln, path){
-			var rt, i, ln, j, k, tk, ntk, tks, t0;
+			var rt, i, ln, j, jj, k, kk, tk, ntk, tks, t0;
 
 			rt = [];
 			rt.push( 'var _$$buf=[],_$$ln,_$$pt="'+path+'";try{with(_$$tipJSP){' );
 
 			for( i = 0, ln = tokens.length; i < ln; i++ ){
 				tk = tokens[i],
-				t0 = tk.match( r11 );
+				t0 = tk.match( r2 );
 				if( t0 ) lln += t0.length;
 				rt.push( "_$$ln=" + lln + ';' );
 				if( tk.indexOf( ST ) > -1 ){ //<@
 					tks = tk.split( ST );
 					rt.push( _push + '"' + tks[0].replace( r1, '\\"' ) + '"' + ');' );
 					if( !tks[1].indexOf( '=' ) ){ // val
-						ntk = tks[1].substr(1),
-						ntk = trim( ntk.replace( r11, '' ) ).split( '|' ),
-						k = 1;
-						while( k < ntk.length ){
+						ntk = trim( tks[1].substr(1).replace( r2, '' ) ).split( '|' ),
+						k = 1, kk = ntk.length;
+						while( k < kk ){
 							if( ( t0 = ntk[k++] ) && ( t0 = t0.split( ',' ) ) ){
 								ntk[0] = ( modifier[ t0[0] ] ? '_$mdf.' : '' ) + t0[0] + '(' + ntk[0],
-								j = 1;
-								while( j < t0.length ) ntk[0] += ',' + t0[j++];
+								j = 1, jj = t0.length;
+								while( j < jj ) ntk[0] += ',' + t0[j++];
 								ntk[0] += ')';
 							}
 						}
 						rt.push( _push + ntk[0] + ');' );
+					}else if( !tks[1].indexOf( '#' ) ){ // cus pas
+						ntk = trim( tks[1].substr(1).replace( r2, '\n' ).replace( r3, '$1' ).replace( r4, '::tipJSP::' ).replace( r2, '' ) );
+						if( !ntk.indexOf( '/' ) ) rt.push( '}' );
+						else
+							ntk = (t0 = ntk.split( ' in ' )).length > 1 ? 'for(var ' + ntk + ' ){': 'if( ' + ntk + ' ){',
+							rt.push( ntk );
 					}else{ // pas
-						if( !( t0 = trim( tks[1].replace( r2, '\n' ).replace( r3, '$1' ).replace( r4, '::tipJSP::' ).replace( r11, '' ) ) ).indexOf( 'include' ) ){
-							if( typeof ( t0 = _renderFile( _getPath( opts, trim( t0.substr( 7 ).replace( r12, '' ) ) ), opts ) ) == 'object' ) throw t0;
+						if( !( t0 = trim( tks[1].replace( r2, '\n' ).replace( r3, '$1' ).replace( r4, '::tipJSP::' ).replace( r2, '' ) ) ).indexOf( 'include' ) ){
+							if( typeof ( t0 = _renderFile( _getPath( opts, trim( t0.substr( 7 ).replace( r5, '' ) ) ), opts ) ) == 'object' ) throw t0;
 							rt.push( _push + '"' + t0.replace( r1, '\\"' ) + '"' + ');' );
 						}else rt.push( t0 );
 					}
