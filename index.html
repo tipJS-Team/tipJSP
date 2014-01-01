@@ -71,7 +71,7 @@
 <li><a href="#includes">Includes</a></li>
 <li><a href="#change-seperator">Custom seperator</a></li>
 <li><a href="#string-modifier">String modifier</a></li>
-<li>Custom user modifier support</li>
+<li><a href="#custom-user-modifier">Custom user modifier</a></li>
 </ul>
 
 <h1>
@@ -311,6 +311,32 @@ var html = tipJSP.render(templateStr, vdata);
 </code></pre>
 
 <h1>
+<a name="change-seperator" class="anchor" href="#change-seperator"><span class="octicon octicon-link"></span></a>&lt;@ Change seperator @&gt;</h1>
+
+<h3>
+<a name="tipjsprenderstring-data" class="anchor" href="#tipjsprenderstring-data"><span class="octicon octicon-link"></span></a>tipJSP.setSep( start, end )</h3>
+
+<h5>template</h5>
+<pre><code>&lt;ul&gt;
+&lt;% for(var i=0; i&lt;arr.length; i++){ %&gt;
+    &lt;li&gt;&lt;%= arr[i] %&gt;&lt;/li&gt;
+&lt;% } %&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<h5>JavaScript</h5>
+<pre><code>var vdata = {
+    arr : ["peku1","peku2","peku3"]
+};
+var str = document.getElementById("template").innerHTML;
+tipJSP.setSep('&lt;%', '%&gt;');
+var html = tipJSP.render(str, vdata);
+// or
+var html = tipJSP.setSep('&lt;%', '%&gt;').render(str, vdata);
+console.log(html);
+</code></pre>
+
+<h1>
 <a name="string-modifier" class="anchor" href="#string-modifier"><span class="octicon octicon-link"></span></a>&lt;@ String modifier @&gt;</h1>
 
 <h3>
@@ -382,26 +408,39 @@ var html = tipJSP.render(templateStr, vdata);
 </code></pre>
 
 <h1>
-<a name="change-seperator" class="anchor" href="#change-seperator"><span class="octicon octicon-link"></span></a>&lt;@ Change seperator @&gt;</h1>
+<a name="custom-user-modifier" class="anchor" href="#custom-user-modifier"><span class="octicon octicon-link"></span></a>&lt;@ Custom user modifier @&gt;</h1>
+
+<h3>
+<a name="tipjsprenderstring-data" class="anchor" href="#tipjsprenderstring-data"><span class="octicon octicon-link"></span></a>tipJSP.setModifier( object )</h3>
 
 <h5>template</h5>
-<pre><code>&lt;ul&gt;
-&lt;% for(var i=0; i&lt;arr.length; i++){ %&gt;
-    &lt;li&gt;&lt;%= arr[i] %&gt;&lt;/li&gt;
-&lt;% } %&gt;
-&lt;/ul&gt;
+<pre><code>&lt;div&gt;&lt;@= num|double @&gt;&lt;/div&gt;
+&lt;div&gt;&lt;@= num|half @&gt;&lt;/div&gt;
 </code></pre>
 
 <h5>JavaScript</h5>
-<pre><code>var vdata = {
-    arr : ["peku1","peku2","peku3"]
+<pre><code>var vData = {
+  age : 20
+};
+var userModifier = {
+  double : function( num ){
+    return num * 2;
+  },
+  half : function( num ){
+    return num / 2;
+  }
 };
 var str = document.getElementById("template").innerHTML;
-tipJSP.setSep('&lt;%', '%&gt;');
+tipJSP.setModifier( userModifier );
 var html = tipJSP.render(str, vdata);
 // or
-var html = tipJSP.setSep('&lt;%', '%&gt;').render(str, vdata);
+var html = tipJSP.setModifier( userModifier ).render(str, vdata);
 console.log(html);
+</code></pre>
+
+<h5>output</h5>
+<pre><code>&lt;div&gt;40&lt;/div&gt;
+&lt;div&gt;10&lt;/div&gt;
 </code></pre>
 
 <h1>

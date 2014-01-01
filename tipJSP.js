@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.3.0
+ * opensource JavaScript template engine ver.0.3.1
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -8,28 +8,30 @@
 
 var tipJSP = (function(){
 	var ST, ED, version, cache, isLocal,
-	trim, modifier,
-	_reader, _getPath, _compile, _render, _getRs, _setSep;
+	trim, escBackSh,
+	_modifier, _reader, _getPath, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.3.0', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.3.1', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
 		var r1;
 		return r1 = /^\s*|\s*$/g, function(s){return ( !s ) ? '' : s.replace( r1, '' );};
+	})(),
+	escBackSh = (function(){
+		var r;
+		return r = /\\/g, function(s){return ( !s ) ? '' : s.replace( r, '\\\\' );}
 	})();
-
-////////////////////////////////// modifier
-	modifier = (function(){
+////////////////////////////////// _modifier
+	_modifier = (function(){
 		var rcur, rcrn, rcn,
-		re1, re2, re3, re4, re5, re6;
+		re1, re2, re3, re4, re5;
 		rcur = /(\d+)(\d{3})/,
 		rcrn = /\r\n|\r/g, rcn = /\n/g,
 		re1 = /&/g, re2 = />/g, re3 = /</g,
 		re4 = /"/g, //"
-		re5 = /'/g, //'
-		re6 = /\\/g;
+		re5 = /'/g; //'
 		return {
 			cr2:function(s, to){
 				return ( !s ) ? '' : s.replace( rcrn, "\n" ).replace( rcn, to );
@@ -62,9 +64,7 @@ var tipJSP = (function(){
 			escapeHtml:function(s){
 				return ( !s ) ? '' : s.replace( re1, '&amp;' ).replace( re2, '&gt;' ).replace( re3, '&lt;' ).replace( re4, '&quot;' ).replace( re5, '&apos;' );
 			},
-			escapeBackslash:function(s){
-				return ( !s ) ? '' : s.replace( re6, '\\\\' );
-			},
+			escapeBackslash:escBackSh,
 			stripTag:function(s){
 				return ( !s ) ? '' : s.replace( /(<([^>]+)>)/ig, '' );
 			},
@@ -107,25 +107,25 @@ var tipJSP = (function(){
 	_compile = (function(){
 		var _push, r1, r2, r3, r4, r5;
 
-		_push = '_$$buf.push(',
-		r1 = /"/g, //"
+		_push = '_$$bf.push(',
+		r1 = /"/g,//"
 		r2 = /::tipJSP::/g,
 		r3 = /(?:\/\*(?:[\s\S]*?)\*\/)|(?:([\s])+\/\/(?:.*)$)/gm,
 		r4 = /\n/g,
-		r5 = /"|'/g; //"
+		r5 = /"|'/g;//"
 
 		return function(tokens, opts, lln, path){
 			var rt, i, ln, j, jj, k, kk, tk, ntk, tks, t0;
 
 			rt = [];
-			rt.push( 'var _$$buf=[],_$$ln,_$$pt="'+path+'";try{with(_$$tipJSP){' );
+			rt.push( 'var _$$bf=[],_$$ln,_$$pt="'+path+'";try{with(_$$opt){' );
 
 			for( i = 0, ln = tokens.length; i < ln; i++ ){
 				tk = tokens[i],
 				t0 = tk.match( r2 );
 				if( t0 ) lln += t0.length;
 				rt.push( "_$$ln=" + lln + ';' );
-				if( tk.indexOf( ST ) > -1 ){ //<@
+				if( tk.indexOf( ST ) > -1 ){
 					tks = tk.split( ST );
 					rt.push( _push + '"' + tks[0].replace( r1, '\\"' ) + '"' + ');' );
 					if( !tks[1].indexOf( '=' ) ){ // val
@@ -133,7 +133,7 @@ var tipJSP = (function(){
 						k = 1, kk = ntk.length;
 						while( k < kk ){
 							if( ( t0 = ntk[k++] ) && ( t0 = t0.split( ',' ) ) ){
-								ntk[0] = ( modifier[ t0[0] ] ? '_$mdf.' : '' ) + t0[0] + '(' + ntk[0],
+								ntk[0] = ( _modifier[ t0[0] ] ? '_$$mf.' : '' ) + t0[0] + '(' + ntk[0],
 								j = 1, jj = t0.length;
 								while( j < jj ) ntk[0] += ',' + t0[j++];
 								ntk[0] += ')';
@@ -154,7 +154,7 @@ var tipJSP = (function(){
 					}
 				}else rt.push( _push + '"' + tk.replace( r1, '\\"' ) + '"' + ');' );
 			}
-			return rt.push( '} return [_$$buf.join(""), _$$ln];}catch(e){e.p=_$$pt,e.ln=_$$ln;throw e;};' ), rt.join( '' );
+			return rt.push( '} return [_$$bf.join(""),_$$ln];}catch(e){e.p=_$$pt,e.ln=_$$ln;throw e;};' ), rt.join( '' );
 		};
 	})();
 
@@ -175,7 +175,7 @@ var tipJSP = (function(){
 				for( i = t0.length; i--; ) if( t0[i].match( t1 ) ){html = t0[i].replace( t1, '' ); break;}
 			}else html = html.replace( r4, '' );
 			i = 1, t0 = html.split( ED );
-			try{return new Function( '_$$tipJSP, _$mdf', _compile( t0, opts, i, modifier.escapeBackslash( path ) ) )( opts, modifier )[0];}
+			try{return new Function( '_$$opt, _$$mf', _compile( t0, opts, i, escBackSh( path ) ) )( opts, _modifier )[0];}
 			catch(e){return e;}
 		};
 	})();
@@ -215,6 +215,11 @@ var tipJSP = (function(){
 		},
 		exports.setSep = function(start, end){
 			return _setSep( start, end ), exports;
+		},
+		exports.setModifier = function( modifier ){
+			var k;
+			for(k in modifier) _modifier[k] = modifier[k];
+			return exports;
 		};
 //////////////////////////////////////// return for web browser
 	else return {
@@ -233,6 +238,11 @@ var tipJSP = (function(){
 		},
 		setSep : function(start, end){
 			return _setSep( start, end ), this;
+		},
+		setModifier : function( modifier ){
+			var k;
+			for(k in modifier) _modifier[k] = modifier[k];
+			return this;
 		}
 	};
 })();
