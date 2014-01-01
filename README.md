@@ -2,14 +2,14 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 ======
 
 #Features
-- Complies with the Express3 framework view system
+- [Complies with the Express3 framework view system](#express3-framework-view-system)
 - Web browser(IE 7+, Chrome, Firefox, Safari, etc...) and Node.js support
 - error line number support
-- Includes
-- Simple loop syntax
-- Simple condition syntax
-- Custom seperator
-- String modifier
+- [Includes](#includes)
+- [Simple loop syntax](#simple-loop-syntax)
+- [Simple condition syntax](#simple-condition-syntax)
+- [Custom seperator](#change-seperator)
+- [String modifier](#string-modifier)
 - Custom user modifier support
 
 #Quick example
@@ -23,6 +23,8 @@ var vdata = {
 var html = tipJSP.render("<ul><li><@=name@></li><li><@=age@></li></ul>", vdata);
 // output "<ul><li>peku</li><li>20</li></ul>"
 ```
+
+#[Try It!](http://tipjs-team.github.io/tipJSP/#try-it)
 
 #Installation
 ###Node.js
