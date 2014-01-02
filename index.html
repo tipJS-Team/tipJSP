@@ -47,7 +47,6 @@
 
   ga('create', 'UA-46798725-1', 'tipjs-team.github.io');
   ga('send', 'pageview');
-
 </script>
   </head>
 
@@ -60,7 +59,9 @@
 					<img id='logo' src='tipJSP.png'>
           <h1 id="project_title">tipJSP(JavaScript Page)</h1>
           <h2 id="project_tagline">JavaScript template engine.</h2>
-
+<script>
+document.getElementById( 'project_title' ).innerHTML += ' v.' + tipJSP.version;
+</script>
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/tipJS-Team/tipJSP/zipball/master">Download this project as a .zip file</a>
               <a class="tar_download_link" href="https://github.com/tipJS-Team/tipJSP/tarball/master">Download this project as a tar.gz file</a>
