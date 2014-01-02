@@ -11,14 +11,12 @@
     "url": "https://github.com/tipJS-Team/tipJSP.git"
   },
   "keywords": [
-    "tipJSP",
-    "JavaScript",
     "template",
     "engine"
   ],
   "author": "Copyright 2013.12. SeungHyun PAEK, tipJS-Team.",
   "engines": {
-    "node": ">= 0.10.15"
+    "node": ">= 0.10.1"
   },
   "license": "MIT or GPL Version 2",
   "bugs": {
