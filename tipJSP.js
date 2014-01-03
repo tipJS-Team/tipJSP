@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.3.3
+ * opensource JavaScript template engine ver.0.3.4
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_modifier, _reader, _getPath, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.3.3', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.3.4', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -21,7 +21,7 @@ var tipJSP = (function(){
 	})(),
 	escBackSh = (function(){
 		var r;
-		return r = /\\/g, function(s){return ( !s ) ? '' : s.replace( r, '\\\\' );}
+		return r = /\\/g, function(s){return ( !s ) ? '' : s.replace( r, '\\\\' );};
 	})();
 ////////////////////////////////// _modifier
 	_modifier = (function(){
@@ -54,14 +54,14 @@ var tipJSP = (function(){
 				var D;
 				D = v ? new Date( v ) : new Date;
 				return f.replace( redt, function(f){
-					var h;
+					var t0;
 					switch( f ){
 					case"yyyy":return ''+D.getFullYear();
 					case"yy":t0=''+(D.getFullYear() % 1000);break;
 					case"MM":t0=''+(D.getMonth() + 1);break;
 					case"dd":t0=''+D.getDate();break;
 					case"HH":t0=''+D.getHours();break;
-					case"hh":t0=''+((h=D.getHours()%12)?h:12);break;
+					case"hh":t0=''+((t0=D.getHours()%12)?t0:12);break;
 					case"ap":t0=D.getHours()<12?ap?ap[0]:'AM':ap?ap[1]:'PM';break;
 					case"mm":t0=''+D.getMinutes();break;
 					case"ss":t0=''+D.getSeconds();break;
