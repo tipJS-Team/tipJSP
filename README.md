@@ -9,7 +9,7 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 - [Simple loop syntax](#simple-loop-syntax)
 - [Simple condition syntax](#simple-condition-syntax)
 - [Custom seperator](#change-seperator)
-- [String modifier](#string-modifier)
+- [String modifier](#string-modifier) (Date format and more useful..)
 - [Custom user modifier](#custom-user-modifier)
 
 #Quick example
@@ -244,6 +244,16 @@ console.log(html);
 // output = '가나...';
 <@= input|cutStrb,5,'..' @>
 // output = '가나다ab..';
+```
+###date(dateformat)
+```
+// input = 1388556061000; // timestamp
+<@= input|date,'yyyy/MM/dd HH:mm:ss' @>
+// output = '2014/01/01 15:01:01';
+<@= input|date,'yyyy년 MM月 ddDay hh:mm:ss:ap',['Morning', 'Noon'] @>
+// output = '2014년 01月 01Day 03:01:01:Noon';
+<@= input|date,'yy-MM-dd hh:mm:ss:ap' @>
+// output = '14-01-01 03:01:01:PM';
 ```
 ###escapeHtml()
 ```

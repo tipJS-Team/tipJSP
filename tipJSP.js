@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.3.2
+ * opensource JavaScript template engine ver.0.3.3
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_modifier, _reader, _getPath, _compile, _render, _getRs, _setSep;
 
 	ST = '<@', ED = '@>',
-	version = '0.3.2', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.3.3', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -25,13 +25,14 @@ var tipJSP = (function(){
 	})();
 ////////////////////////////////// _modifier
 	_modifier = (function(){
-		var rcur, rcrn, rcn,
+		var rcur, rcrn, rcn, redt,
 		re1, re2, re3, re4, re5;
 		rcur = /(\d+)(\d{3})/,
 		rcrn = /\r\n|\r/g, rcn = /\n/g,
 		re1 = /&/g, re2 = />/g, re3 = /</g,
 		re4 = /"/g, //"
-		re5 = /'/g; //'
+		re5 = /'/g, //'
+		redt = /(yyyy|yy|MM|dd|HH|hh|mm|ss|ap)/g;
 		return {
 			cr2:function(s, to){
 				return ( !s ) ? '' : s.replace( rcrn, "\n" ).replace( rcn, to );
@@ -39,6 +40,40 @@ var tipJSP = (function(){
 			cr2br:function(s){
 				return ( !s ) ? '' : this.cr2( s, '<br />' );
 			},
+			cutStrb:function(s, len, rs){
+				var tlen, i;
+				tlen = 0;
+				if( !s ) return '';
+				for( i = 0; i < s.length; i++ ) {
+					tlen += ( s.charCodeAt( i ) > 128 ) ? 2 : 1;
+					if( tlen > len ) return s.substring( 0, i ) + ( rs === undefined || rs === null ? "..." : rs );
+				}
+				return s;
+			},
+			date:function(v, f, ap){
+				var D;
+				D = v ? new Date( v ) : new Date;
+				return f.replace( redt, function(f){
+					var h;
+					switch( f ){
+					case"yyyy":return ''+D.getFullYear();
+					case"yy":t0=''+(D.getFullYear() % 1000);break;
+					case"MM":t0=''+(D.getMonth() + 1);break;
+					case"dd":t0=''+D.getDate();break;
+					case"HH":t0=''+D.getHours();break;
+					case"hh":t0=''+((h=D.getHours()%12)?h:12);break;
+					case"ap":t0=D.getHours()<12?ap?ap[0]:'AM':ap?ap[1]:'PM';break;
+					case"mm":t0=''+D.getMinutes();break;
+					case"ss":t0=''+D.getSeconds();break;
+					default: return f;
+					}
+					return t0.length == 1 ? '0'+t0 : t0;
+				});
+			},
+			escapeHtml:function(s){
+				return ( !s ) ? '' : s.replace( re1, '&amp;' ).replace( re2, '&gt;' ).replace( re3, '&lt;' ).replace( re4, '&quot;' ).replace( re5, '&apos;' );
+			},
+			escapeBackslash:escBackSh,
 			numcomma:function(n, mk, rg){
 				var t0, t1;
 				if( !n && n !== 0 ) return "0" + ( mk ? mk : '' );
@@ -51,20 +86,6 @@ var tipJSP = (function(){
 				}
 				return t0 + ( n[1] ? "."+n[1]:'' ) + t1;
 			},
-			cutStrb:function(s, len, rs){
-				var tlen, i;
-				tlen = 0;
-				if( !s ) return '';
-				for( i = 0; i < s.length; i++ ) {
-					tlen += ( s.charCodeAt( i ) > 128 ) ? 2 : 1;
-					if( tlen > len ) return s.substring( 0, i ) + ( rs === undefined || rs === null ? "..." : rs );
-				}
-				return s;
-			},
-			escapeHtml:function(s){
-				return ( !s ) ? '' : s.replace( re1, '&amp;' ).replace( re2, '&gt;' ).replace( re3, '&lt;' ).replace( re4, '&quot;' ).replace( re5, '&apos;' );
-			},
-			escapeBackslash:escBackSh,
 			stripTag:function(s){
 				return ( !s ) ? '' : s.replace( /(<([^>]+)>)/ig, '' );
 			},
