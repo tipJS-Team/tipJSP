@@ -84,7 +84,7 @@ document.getElementById( 'project_title' ).innerHTML += ' v.' + tipJSP.version;
 <li><a href="#simple-condition">Simple condition syntax</a></li>
 <li><a href="#includes">Includes</a></li>
 <li><a href="#change-seperator">Custom seperator</a></li>
-<li><a href="#string-modifier">String modifier</a></li>
+<li><a href="#string-modifier">String modifier</a> (Date format and more useful..)</li>
 <li><a href="#custom-user-modifier">Custom user modifier</a></li>
 </ul>
 
@@ -377,6 +377,18 @@ console.log(html);
 // output = '가나...';
 &lt;@= input|cutStrb,5,'..' @&gt;
 // output = '가나다ab..';
+</code></pre>
+
+<h3>
+<a name="cutstrblength-reststr" class="anchor" href="#cutstrblength-reststr"><span class="octicon octicon-link"></span></a>date(dateformat)</h3>
+
+<pre><code>// input = 1388556061000; // timestamp
+&lt;@= input|date,'yyyy/MM/dd HH:mm:ss' @&gt;
+// output = '2014/01/01 15:01:01';
+&lt;@= input|date,'yyyy년 MM月 ddDay hh:mm:ss:ap',['Morning', 'Noon'] @&gt;
+// output = '2014년 01月 01Day 03:01:01:Noon';
+&lt;@= input|date,'yy-MM-dd hh:mm:ss:ap' @&gt;
+// output = '14-01-01 03:01:01:PM';
 </code></pre>
 
 <h3>
