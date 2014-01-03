@@ -247,7 +247,7 @@ console.log(html);
 ```
 ###date(dateformat)
 ```
-// input = 1388556061000; // timestamp
+// input = 1388556061000; // milliseconds or dateString
 <@= input|date,'yyyy/MM/dd HH:mm:ss' @>
 // output = '2014/01/01 15:01:01';
 <@= input|date,'yyyy년 MM月 ddDay hh:mm:ss:ap',['Morning', 'Noon'] @>
