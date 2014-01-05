@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.4.1
+ * opensource JavaScript template engine ver.0.4.2
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_modifier, _reader, _getPath, _compile, _extends, _render, _getRs, _setSep, _getUrl;
 
 	ST = '<@', ED = '@>',
-	version = '0.4.1', cache = {}, ccache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0, isCache = isLocal ? 0 : 1;
+	version = '0.4.2', cache = {}, ccache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0, isCache = isLocal ? 0 : 1;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -228,9 +228,11 @@ var tipJSP = (function(){
 					t1 = new RegExp( '^'+tid+']]' );
 					for( i = t0.length; i--; ) if( t0[i].match( t1 ) ){html = t0[i].replace( t1, '' ); break;}
 				}else html = html.replace( r4, '' );
-				i = 1;
-				if( path ) t1 = isCache ?
-					ccache[path] ||	( ccache[path] = _compile( html.split( ED ), opts, i, escBackSh( path ) ) ) :
+				i = 1,
+				t1 = path ?
+						isCache ?
+							ccache[path] ||	( ccache[path] = _compile( html.split( ED ), opts, i, escBackSh( path ) ) ) :
+							_compile( html.split( ED ), opts, i, escBackSh( path ) ) :
 					_compile( html.split( ED ), opts, i, escBackSh( path ) );
 				try{return t0 = ['var _$$bf=[],_$$ln,_$$pt;try{with(_$$opt){',	t1[0], '} return [_$$bf.join(""),_$$ln];}catch(e){e.p=_$$pt,e.ln=_$$ln;throw e;};'],
 					new Function( '_$$opt, _$$mf', t0.join('') )( opts, _modifier )[0];}
