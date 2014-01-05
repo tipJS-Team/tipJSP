@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.4.2
+ * opensource JavaScript template engine ver.0.4.3
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -12,7 +12,7 @@ var tipJSP = (function(){
 	_modifier, _reader, _getPath, _compile, _extends, _render, _getRs, _setSep, _getUrl;
 
 	ST = '<@', ED = '@>',
-	version = '0.4.2', cache = {}, ccache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0, isCache = isLocal ? 0 : 1;
+	version = '0.4.3', cache = {}, ccache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0, isCache = isLocal ? 0 : 1;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -265,14 +265,14 @@ var tipJSP = (function(){
 	if( isLocal )
 		// for express
 		exports = module.exports = function(path, opts, fn){
-			return fn( null, _getRs( _renderFile( _getPath( opts, path ), opts ) ) );
+			return fn( null, _getRs( _renderFile( path, opts ) ) );
 		},
 		exports.version = version,
 		exports.render = function(html, opts, tid){
 			return ( html ) ? _getRs( _render( html, opts, tid ) ) : null;
 		},
 		exports.renderFile = function(path, opts){
-			return _getRs( _renderFile( _getPath( opts, path ), opts ) );
+			return _getRs( _renderFile( path, opts ) );
 		},
 		exports.setSep = function(start, end){
 			return _setSep( start, end ), exports;
