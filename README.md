@@ -252,7 +252,7 @@ var html = tipJSP.renderFile('index.jsp', vdata);
 </html>
 ```
 #Compile caching
-###setCache[true/false]  
+###setCache(true/false)  
 
 ```
 var vdata = {
