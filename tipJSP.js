@@ -1,18 +1,18 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.3.4
+ * opensource JavaScript template engine ver.0.4.1
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
  */
 
 var tipJSP = (function(){
-	var ST, ED, version, cache, isLocal,
+	var ST, ED, version, cache, ccache, isCache, isLocal,
 	trim, escBackSh,
-	_modifier, _reader, _getPath, _compile, _render, _getRs, _setSep;
+	_modifier, _reader, _getPath, _compile, _extends, _render, _getRs, _setSep, _getUrl;
 
 	ST = '<@', ED = '@>',
-	version = '0.3.4', cache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0;
+	version = '0.4.1', cache = {}, ccache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0, isCache = isLocal ? 0 : 1;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -22,7 +22,11 @@ var tipJSP = (function(){
 	escBackSh = (function(){
 		var r;
 		return r = /\\/g, function(s){return ( !s ) ? '' : s.replace( r, '\\\\' );};
-	})();
+	})(),
+	_getUrl = function(url){
+		return isCache ? url : isLocal ? url : url + (url.indexOf("?") < 0 ? "?" : "&") + Math.random();
+	};
+
 ////////////////////////////////// _modifier
 	_modifier = (function(){
 		var rcur, rcrn, rcn, redt,
@@ -32,7 +36,8 @@ var tipJSP = (function(){
 		re1 = /&/g, re2 = />/g, re3 = /</g,
 		re4 = /"/g, //"
 		re5 = /'/g, //'
-		redt = /(yyyy|yy|MM|dd|HH|hh|mm|ss|ap)/g;
+		redt = /(yyyy|yy|MM|dd|HH|hh|mm|ss|ap)/g,
+		restag = /(<([^>]+)>)/ig;
 		return {
 			cr2:function(s, to){
 				return ( !s ) ? '' : s.replace( rcrn, "\n" ).replace( rcn, to );
@@ -41,10 +46,10 @@ var tipJSP = (function(){
 				return ( !s ) ? '' : this.cr2( s, '<br />' );
 			},
 			cutStrb:function(s, len, rs){
-				var tlen, i;
+				var tlen, i, j;
 				tlen = 0;
 				if( !s ) return '';
-				for( i = 0; i < s.length; i++ ) {
+				for( i = 0, j = s.length; i < j; i++ ) {
 					tlen += ( s.charCodeAt( i ) > 128 ) ? 2 : 1;
 					if( tlen > len ) return s.substring( 0, i ) + ( rs === undefined || rs === null ? "..." : rs );
 				}
@@ -87,7 +92,7 @@ var tipJSP = (function(){
 				return t0 + ( n[1] ? "."+n[1]:'' ) + t1;
 			},
 			stripTag:function(s){
-				return ( !s ) ? '' : s.replace( /(<([^>]+)>)/ig, '' );
+				return ( !s ) ? '' : s.replace( restag, '' );
 			},
 			trim:trim
 		};
@@ -120,7 +125,7 @@ var tipJSP = (function(){
 ////////////////////////////////// _getPath
 	_getPath = (function(){
 		var t0;
-		if( isLocal ) return t0 = require( 'path' ), function(opts, fname){return t0.join( opts.settings.views, fname );};
+		if( isLocal ) return t0 = require( 'path' ), function(opts, fname){return t0.join( ( opts.settings ? opts.settings.views : process.cwd() ), fname );};
 		else return function(opts, fname){return fname;};
 	})();
 
@@ -139,7 +144,7 @@ var tipJSP = (function(){
 			var rt, i, ln, j, jj, k, kk, tk, ntk, tks, t0;
 
 			rt = [];
-			rt.push( 'var _$$bf=[],_$$ln,_$$pt="'+path+'";try{with(_$$opt){' );
+			rt.push( '_$$pt="'+path+'";_$$ln='+lln+';' );
 
 			for( i = 0, ln = tokens.length; i < ln; i++ ){
 				tk = tokens[i],
@@ -170,11 +175,34 @@ var tipJSP = (function(){
 						if( !( t0 = trim( tks[1].replace( r2, '\n' ).replace( r3, '$1' ).replace( r4, '::tipJSP::' ).replace( r2, '' ) ) ).indexOf( 'include' ) ){
 							if( typeof ( t0 = _renderFile( _getPath( opts, trim( t0.substr( 7 ).replace( r5, '' ) ) ), opts ) ) == 'object' ) throw t0;
 							rt.push( _push + '"' + t0.replace( r1, '\\"' ) + '"' + ');' );
-						}else rt.push( t0 );
+						}else if( !t0.indexOf( 'extends' ) );
+						else if( !t0.indexOf( 'match' ) ) rt.push( opts._$$blk[trim( t0.substr( 5 ).replace( r5, '' ) )] );
+						else rt.push( t0 );
 					}
 				}else rt.push( _push + '"' + tk.replace( r1, '\\"' ) + '"' + ');' );
 			}
-			return rt.push( '} return [_$$bf.join(""),_$$ln];}catch(e){e.p=_$$pt,e.ln=_$$ln;throw e;};' ), rt.join( '' );
+			return [rt.join( '' ),lln];
+		};
+	})();
+
+////////////////////////////////// _extends
+	_extends = (function(){
+		var r1;
+
+		r1 = /::tipJSP::/g;
+		return function(base, html, opts, path){
+			var t0, t1, i, j, key, body, ln, blk;
+			blk = {}, ln = 2,
+			t0 = html.split( new RegExp( ST+'\s*match\s*' ) );
+			for(i = 1, j = t0.length; i < j; i++){
+				key = t0[i].substr( 0, t0[i].indexOf( ED ) ),
+				body = t0[i].substr( ( t0[i].indexOf( ED ) + ED.length ) );
+				if( path ) t1 = isCache ?
+					ccache[path+key] ||	( ccache[path+key] = _compile( body.split( ED ), opts, ln, escBackSh( path ) ) ) :
+					_compile( body.split( ED ), opts, ln, escBackSh( path ) );
+				blk[trim( key )] = t1[0], ln = t1[1];
+			}
+			return opts._$$blk = blk, _render( null, opts, null, base );
 		};
 	})();
 
@@ -188,21 +216,32 @@ var tipJSP = (function(){
 		r4 = /\[\[#[a-zA-Z0-9_-]*\]\]/g;
 		return function(html, opts, tid, path){
 			var t0, t1, i;
+			if( path ) html = isCache ? cache[path] || ( cache[path] = _reader( path ) ) : _reader( _getUrl( path ) );
 			html = html.replace( r1, '\n' ).replace( r2, '\\\\' ).replace( r3, '::tipJSP::' );
-			if( typeof tid == 'string' ){
-				t0 = html.split( '[[#' ),
-				t1 = new RegExp( '^'+tid+']]' );
-				for( i = t0.length; i--; ) if( t0[i].match( t1 ) ){html = t0[i].replace( t1, '' ); break;}
-			}else html = html.replace( r4, '' );
-			i = 1, t0 = html.split( ED );
-			try{return new Function( '_$$opt, _$$mf', _compile( t0, opts, i, escBackSh( path ) ) )( opts, _modifier )[0];}
-			catch(e){return e;}
+			t0 = html.substr(0, ( t1 = html.indexOf( '\n' ) ) > -1 ? t1 : html.length );
+			t1 = new RegExp( ST+'\s*extends\s*' );
+			if( t1.test( t0 ) )
+				return t1 = trim( t0.substring( t0.indexOf( 'extends' )+7, t0.indexOf( ED ) ) ), _extends( t1, html, opts, path );
+			else{
+				if( typeof tid == 'string' ){
+					t0 = html.split( '[[#' ),
+					t1 = new RegExp( '^'+tid+']]' );
+					for( i = t0.length; i--; ) if( t0[i].match( t1 ) ){html = t0[i].replace( t1, '' ); break;}
+				}else html = html.replace( r4, '' );
+				i = 1;
+				if( path ) t1 = isCache ?
+					ccache[path] ||	( ccache[path] = _compile( html.split( ED ), opts, i, escBackSh( path ) ) ) :
+					_compile( html.split( ED ), opts, i, escBackSh( path ) );
+				try{return t0 = ['var _$$bf=[],_$$ln,_$$pt;try{with(_$$opt){',	t1[0], '} return [_$$bf.join(""),_$$ln];}catch(e){e.p=_$$pt,e.ln=_$$ln;throw e;};'],
+					new Function( '_$$opt, _$$mf', t0.join('') )( opts, _modifier )[0];}
+				catch(e){return e;}
+			}
 		};
 	})();
 
 //////////////////////////////////////// _renderFile
 	function _renderFile(path, opts){
-		return _render( opts.cache ? cache[path] || ( cache[path] = _reader( path ) ) : _reader( path ), opts, null, path );
+		return _render( null, opts, null, path );
 	}
 
 //////////////////////////////////////// _getRs
@@ -224,45 +263,48 @@ var tipJSP = (function(){
 	if( isLocal )
 		// for express
 		exports = module.exports = function(path, opts, fn){
-			return fn( null, _getRs( _renderFile( path, opts ) ) );
+			return fn( null, _getRs( _renderFile( _getPath( opts, path ), opts ) ) );
 		},
 		exports.version = version,
 		exports.render = function(html, opts, tid){
-			return ( html && opts ) ? _getRs( _render( html, opts, tid ) ) : null;
+			return ( html ) ? _getRs( _render( html, opts, tid ) ) : null;
 		},
 		exports.renderFile = function(path, opts){
-			return _getRs( _renderFile( path, opts ) );
+			return _getRs( _renderFile( _getPath( opts, path ), opts ) );
 		},
 		exports.setSep = function(start, end){
 			return _setSep( start, end ), exports;
 		},
-		exports.setModifier = function( modifier ){
+		exports.setModifier = function(modifier){
 			var k;
 			for(k in modifier) _modifier[k] = modifier[k];
 			return exports;
+		},
+		exports.setCache = function(flg){
+			return isCache = flg, exports;
 		};
 //////////////////////////////////////// return for web browser
 	else return {
 		version : version,
-		render : function( html, opts, tid, targetEl ){
+		render : function(html, opts, tid, targetEl){
 			var rt;
-			if( html && opts ){
-				opts.cache = opts.cache === undefined ? 1 : opts.cache,
+			if( html ){
 				rt = _getRs( _render( html, opts, tid ) );
 				if( targetEl ) targetEl.innerHTML = rt;
 				return rt;
 			}else return null;
 		},
 		renderFile : function(path, opts){
-			return opts.cache = opts.cache === undefined ? 1 : opts.cache, _getRs( _renderFile( path, opts ) );
+			return _getRs( _renderFile( path, opts ) );
 		},
 		setSep : function(start, end){
 			return _setSep( start, end ), this;
 		},
-		setModifier : function( modifier ){
+		setModifier : function(modifier){
 			var k;
 			for(k in modifier) _modifier[k] = modifier[k];
 			return this;
-		}
+		},
+		setCache : function(flg){return isCache = flg, this;}
 	};
 })();

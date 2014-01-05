@@ -5,7 +5,9 @@ tipJSP(JavaScript Page) - JavaScript template engine.
 - [Complies with the Express3 framework view system](#express3-framework-view-system)
 - Web browser(IE 7+, Chrome, Firefox, Safari, etc...) and Node.js support
 - error line number support
+- [Compile caching](#compile-caching)
 - [Includes](#includes)
+- [Extends](#extends)
 - [Simple loop syntax](#simple-loop-syntax)
 - [Simple condition syntax](#simple-condition-syntax)
 - [Custom seperator](#change-seperator)
@@ -198,6 +200,69 @@ var html = tipJSP.render(templateStr, vdata);
 <h1>HEADER</h1>
 </body>
 </html>
+```
+
+#Extends
+#####base.jsp  
+
+```
+<html>
+<body>
+<h1>TITLE</h1>
+<ul>
+<@match child1@>
+</ul>
+<ul>
+<@match child2@>
+</ul>
+</body>
+</html>
+```
+#####index.jsp  
+
+```
+<@extends base.jsp@>
+<@match child1@>
+<li>child1-1</li>
+<li>child1-2</li>
+<@match child2@>
+<li>child2-1</li>
+<li>child2-2</li>
+```
+#####script  
+
+```
+var html = tipJSP.renderFile('index.jsp', vdata);
+```
+#####output  
+
+```
+<html>
+<body>
+<h1>TITLE</h1>
+<ul>
+<li>child1-1</li>
+<li>child1-2</li>
+</ul>
+<ul>
+<li>child2-1</li>
+<li>child2-2</li>
+</ul>
+</body>
+</html>
+```
+#Compile caching
+###setCache[true/false]  
+
+```
+var vdata = {
+	arr : ["peku1","peku2","peku3"]
+};
+var str = document.getElementById("template").innerHTML;
+tipJSP.setCache(true); // enable/disable compile cache
+var html = tipJSP.render(str, vdata);
+// or
+var html = tipJSP.setCache(true).render(str, vdata);
 ```
 
 #Change seperator
