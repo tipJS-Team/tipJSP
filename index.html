@@ -80,14 +80,17 @@ document.getElementById( 'project_title' ).innerHTML += ' v.' + tipJSP.version;
 <li><a href="#express3-framework-view-system">Complies with the Express3 framework view system</a></li>
 <li>Web browser(IE 7+, Chrome, Firefox, Safari, etc...) and Node.js support</li>
 <li>error line number support</li>
+<li><a href="#compile-caching">Compile caching</a></li>
 <li><a href="#simple-loop">Simple loop syntax</a></li>
 <li><a href="#simple-condition">Simple condition syntax</a></li>
 <li><a href="#includes">Includes</a></li>
+<li><a href="#extends">Extends</a></li>
 <li><a href="#change-seperator">Custom seperator</a></li>
 <li><a href="#string-modifier">String modifier</a> (Date format and more useful..)</li>
 <li><a href="#custom-user-modifier">Custom user modifier</a></li>
 </ul>
 
+<br/>
 <h1>
 <a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>&lt;@ Quick example @&gt;</h1>
 
@@ -102,6 +105,7 @@ var html = tipJSP.render("&lt;ul&gt;&lt;li&gt;&lt;@=name@&gt;&lt;/li&gt;&lt;li&g
 // output "&lt;ul&gt;&lt;li&gt;peku&lt;/li&gt;&lt;li&gt;20&lt;/li&gt;&lt;/ul&gt;"
 </code></pre>
 
+<br/>
 <h1>
 <a name="try-it" class="anchor" href="#try-it"><span class="octicon octicon-link"></span></a>&lt;@ Try it! @&gt;</h1>
 <article>
@@ -148,6 +152,8 @@ function tryit(){
 tryit();
 </script>
 </article>
+
+<br/>
 <h1>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>&lt;@ Installation @&gt;</h1>
 
@@ -163,6 +169,7 @@ tryit();
 <pre><code>&lt;script src='tipJSP.js'&gt;&lt;/script&gt;
 </code></pre>
 
+<br/>
 <h1>
 <a name="express3-framework-view-system" class="anchor" href="#express3-framework-view-system"><span class="octicon octicon-link"></span></a>&lt;@ Express3 framework view system @&gt;</h1>
 
@@ -174,6 +181,7 @@ app.engine( 'jsp', require('tipjsp').setSep('&lt;%', '%&gt;') );
 ...
 </code></pre>
 
+<br/>
 <h1>
 <a name="rendering" class="anchor" href="#rendering"><span class="octicon octicon-link"></span></a>&lt;@ Rendering @&gt;</h1>
 
@@ -218,6 +226,7 @@ var html = tipJSP.renderFile("./template.jsp", vdata);
 console.log(html);
 </code></pre>
 
+<br/>
 <h1>
 <a name="simple-loop" class="anchor" href="#simple-loop"><span class="octicon octicon-link"></span></a>&lt;@ Simple loop syntax @&gt;</h1>
 
@@ -275,6 +284,7 @@ var html = tipJSP.render(templateStr, vdata);
 &lt;/ul&gt;
 </code></pre>
 
+<br/>
 <h1>
 <a name="simple-condition" class="anchor" href="#simple-condition"><span class="octicon octicon-link"></span></a>&lt;@ Simple condition syntax @&gt;</h1>
 
@@ -301,6 +311,55 @@ var html = tipJSP.render(templateStr, vdata);
 <pre><code>&lt;h1&gt;true&lt;/h1&gt;
 </code></pre>
 
+<br/>
+<h1>
+<a name="extends" class="anchor" href="#extends"><span class="octicon octicon-link"></span></a>&lt;@ Extends @&gt;</h1>
+
+<h5>base.jsp</h5>
+</ul><pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;h1&gt;TITLE&lt;/h1&gt;
+&lt;ul&gt;
+&lt;@match child1@&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;@match child2@&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h5>index.jsp</h5>
+<pre><code>&lt;@extends base.jsp@&gt;
+&lt;@match child1@&gt;
+&lt;li&gt;child1-1&lt;/li&gt;
+&lt;li&gt;child1-2&lt;/li&gt;
+&lt;@match child2@&gt;
+&lt;li&gt;child2-1&lt;/li&gt;
+&lt;li&gt;child2-2&lt;/li&gt;
+</code></pre>
+
+<h5>JavaScript</h5>
+<pre><code>var html = tipJSP.renderFile('index.jsp', vdata);
+</code></pre>
+
+<h5>output</h5>
+<pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;h1&gt;TITLE&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;child1-1&lt;/li&gt;
+&lt;li&gt;child1-2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;child2-1&lt;/li&gt;
+&lt;li&gt;child2-2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<br/>
 <h1>
 <a name="includes" class="anchor" href="#includes"><span class="octicon octicon-link"></span></a>&lt;@ Includes @&gt;</h1>
 
@@ -324,6 +383,25 @@ var html = tipJSP.render(templateStr, vdata);
 &lt;/html&gt;
 </code></pre>
 
+<br/>
+<h1>
+<a name="compile-caching" class="anchor" href="#compile-caching"><span class="octicon octicon-link"></span></a>&lt;@ Compile caching @&gt;</h1>
+
+<h3>
+<a name="tipjsprenderstring-data" class="anchor" href="#tipjsprenderstring-data"><span class="octicon octicon-link"></span></a>tipJSP.setCache(true/false)</h3>
+
+<h5>JavaScript</h5>
+<pre><code>var vdata = {
+    arr : ["peku1","peku2","peku3"]
+};
+var str = document.getElementById("template").innerHTML;
+tipJSP.setCache(true); // enable/disable compile cache
+var html = tipJSP.render(str, vdata);
+// or
+var html = tipJSP.setCache(true).render(str, vdata);
+</code></pre>
+
+<br/>
 <h1>
 <a name="change-seperator" class="anchor" href="#change-seperator"><span class="octicon octicon-link"></span></a>&lt;@ Change seperator @&gt;</h1>
 
@@ -350,6 +428,7 @@ var html = tipJSP.setSep('&lt;%', '%&gt;').render(str, vdata);
 console.log(html);
 </code></pre>
 
+<br/>
 <h1>
 <a name="string-modifier" class="anchor" href="#string-modifier"><span class="octicon octicon-link"></span></a>&lt;@ String modifier @&gt;</h1>
 
@@ -433,6 +512,7 @@ console.log(html);
 // output = 'abc d ef';
 </code></pre>
 
+<br/>
 <h1>
 <a name="custom-user-modifier" class="anchor" href="#custom-user-modifier"><span class="octicon octicon-link"></span></a>&lt;@ Custom user modifier @&gt;</h1>
 
@@ -469,6 +549,7 @@ console.log(html);
 &lt;div&gt;10&lt;/div&gt;
 </code></pre>
 
+<br/>
 <h1>
 <a name="thanks" class="anchor" href="#thanks"><span class="octicon octicon-link"></span></a>&lt;@ Thanks @&gt;</h1>
 
