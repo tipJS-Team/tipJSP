@@ -1,6 +1,6 @@
 /*
  * tipJSP(JavaScript Page)
- * opensource JavaScript template engine ver.0.4.3
+ * opensource JavaScript template engine ver.0.4.5
  * Copyright 2013.12. SeungHyun PAEK, tipJS-Team.
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * GitHub: https://github.com/tipJS-Team/tipJSP
@@ -8,11 +8,11 @@
 
 var tipJSP = (function(){
 	var ST, ED, version, cache, ccache, isCache, isLocal,
-	trim, escBackSh,
+	trim, escBackSh, escRegExp,
 	_modifier, _reader, _getPath, _compile, _extends, _render, _getRs, _setSep, _getUrl;
 
 	ST = '<@', ED = '@>',
-	version = '0.4.3', cache = {}, ccache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0, isCache = isLocal ? 0 : 1;
+	version = '0.4.5', cache = {}, ccache = {}, isLocal = ( typeof module !== 'undefined' && module.exports ) ? 1 : 0, isCache = isLocal ? 0 : 1;
 
 	// trim polyfill
 	trim = ( String.prototype.trim ) ? function(s){return ( !s ) ? '' : s.trim();} : (function(){
@@ -23,13 +23,17 @@ var tipJSP = (function(){
 		var r;
 		return r = /\\/g, function(s){return ( !s ) ? '' : s.replace( r, '\\\\' );};
 	})(),
+	escRegExp = (function(){
+		var r;
+		return r = /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, function(s){return ( !s ) ? '' : s.replace( r, '\\$&' );};
+	})();
 	_getUrl = function(url){
 		return isCache ? url : isLocal ? url : url + (url.indexOf("?") < 0 ? "?" : "&") + Math.random();
 	};
 
 ////////////////////////////////// _modifier
 	_modifier = (function(){
-		var rcur, rcrn, rcn, redt,
+		var rcur, rcrn, rcn, redt, restag,
 		re1, re2, re3, re4, re5;
 		rcur = /(\d+)(\d{3})/,
 		rcrn = /\r\n|\r/g, rcn = /\n/g,
@@ -50,7 +54,7 @@ var tipJSP = (function(){
 				tlen = 0;
 				if( !s ) return '';
 				for( i = 0, j = s.length; i < j; i++ ) {
-					tlen += ( s.charCodeAt( i ) > 128 ) ? 2 : 1;
+					tlen += s.charCodeAt( i ) > 128 ? 2 : 1;
 					if( tlen > len ) return s.substring( 0, i ) + ( rs === undefined || rs === null ? "..." : rs );
 				}
 				return s;
@@ -168,9 +172,8 @@ var tipJSP = (function(){
 					}else if( !tks[1].indexOf( '#' ) ){ // cus pas
 						ntk = trim( tks[1].substr(1).replace( r2, '\n' ).replace( r3, '$1' ).replace( r4, '::tipJSP::' ).replace( r2, '' ) );
 						if( !ntk.indexOf( '/' ) ) rt.push( '}' );
-						else
-							ntk = (t0 = ntk.split( ' in ' )).length > 1 ? 'for(var ' + ntk + ' ){': 'if( ' + ntk + ' ){',
-							rt.push( ntk );
+						else ntk = (t0 = ntk.split( ' in ' )).length > 1 ? opts[t0[1]].pop ? 'for(var '+t0[0]+'=0;'+t0[0]+'<'+t0[1]+'.length;'+t0[0]+'++){' :
+							'for(var '+ntk+'){' : 'if('+ntk+'){', rt.push( ntk );
 					}else{ // pas
 						if( !( t0 = trim( tks[1].replace( r2, '\n' ).replace( r3, '$1' ).replace( r4, '::tipJSP::' ).replace( r2, '' ) ) ).indexOf( 'include' ) ){
 							if( typeof ( t0 = _renderFile( _getPath( opts, trim( t0.substr( 7 ).replace( r5, '' ) ) ), opts ) ) == 'object' ) throw t0;
@@ -193,7 +196,7 @@ var tipJSP = (function(){
 		return function(base, html, opts, path){
 			var t0, t1, i, j, key, body, ln, blk;
 			blk = {}, ln = 2,
-			t0 = html.split( new RegExp( ST+'\s*match\s*' ) );
+			t0 = html.split( new RegExp( escRegExp( ST )+'\s*match\s*' ) );
 			for(i = 1, j = t0.length; i < j; i++){
 				key = t0[i].substr( 0, t0[i].indexOf( ED ) ),
 				body = t0[i].substr( ( t0[i].indexOf( ED ) + ED.length ) );
@@ -219,7 +222,7 @@ var tipJSP = (function(){
 			if( path ) html = isCache ? cache[path] || ( cache[path] = _reader( path ) ) : _reader( _getUrl( path ) );
 			html = html.replace( r1, '\n' ).replace( r2, '\\\\' ).replace( r3, '::tipJSP::' );
 			t0 = html.substr(0, ( t1 = html.indexOf( '\n' ) ) > -1 ? t1 : html.length );
-			t1 = new RegExp( ST+'\s*extends\s*' );
+			t1 = new RegExp( escRegExp( ST )+'\s*extends\s*' );
 			if( t1.test( t0 ) )
 				return t1 = trim( t0.substring( t0.indexOf( 'extends' )+7, t0.indexOf( ED ) ) ), _extends( t1, html, opts, path );
 			else{
